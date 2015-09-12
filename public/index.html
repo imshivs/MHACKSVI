@@ -6,28 +6,17 @@
 		.container {
 			background-color: black;
 			opacity: 0.5;
-			padding: 20px;
+			padding: 50px;
+			min-height: 350px;
 		}
 		.main-title, #key-down {
 			color:white;
 			font-size:72px;
 		}
-
-		 * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
 	</style>
-
 	<script type="text/javascript">
 		//If we are a stb, set the resolution
 		if (!!navigator.setResolution) {
-			console.log(videosource.getVideoOutputResolution());
-
 		  navigator.setResolution(1280, 720);
 		}
 
@@ -39,6 +28,10 @@
 		function keyHandler(e){
 			var code = e.keyCode
 				, container = document.getElementById('key-down');
+            
+            var channel = Channel.getCurrentChannel();
+            
+            container.innerHTML = channel.getAltTitle();
 
 			//Don't for get to put a BREAK after every case OR it will 
 			//Fall through like it does below.
@@ -77,7 +70,7 @@
         case 47: //back
         case 189 : //dash
         default :
-        	container.innerHTML = code;
+        	//container.innerHTML = channel.getAltTitle();
         	break;
       }
 
@@ -85,7 +78,8 @@
 			return false;
 	  }
 
-		window.onkeydown = keyHandler;
+		//window.onkeydown = keyHandler;
+        window.onload = keyHandler;
 
 		window.onerror = function(errorMsg, url, lineNumber){
 		   // If Webkit throws an error on the STB - the app crashes. 
@@ -100,36 +94,12 @@
 	</script>
 </head>
 <body>
-<!-- 	<div class="container">
+	<div class="container">
 		<h2 style='color:white'>Sample Hackathon App - Keypresses - Directv</h2>
 		<p style='color:white'>Press a key on your remote to find out its keyCode</p>
-		<h1 class="main-title">Key Pressed:</h1>
+		<h1 class="main-title">You're watching:</h1>
 		<div id="key-down"></div>
 	</div>
- -->
-<div class="container">
-<ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      var socket = io();
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-      });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
-      });
-    </script>
- </div>
-
-
-
-
 	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>
